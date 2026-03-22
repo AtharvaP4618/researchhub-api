@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify, abort 
 from app.models.user import User
 from app.extensions import db, bcrypt, jwt 
-from flask_jwt_extended import create_access_token
+from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity, get_jwt
 from sqlalchemy import or_
 
 auth_bp = Blueprint("auth", __name__)
@@ -63,7 +63,12 @@ def user_login():
     if not user or not user.check_password(password):
         abort(401, description="Invalid credentials")
     
-    access_token = create_access_token(identity=user.id)
+    access_token = create_access_token(
+        identity= str(user.id),
+        additional_claims={
+            "username": user.username
+        }
+    )
 
     return jsonify({
         "access_token": access_token,
@@ -72,8 +77,23 @@ def user_login():
     }), 200
 
     
+@auth_bp.route("/me", methods = ["GET"])
+@jwt_required()
+def get_me():
+    user_id = int(get_jwt_identity())
+    claims = get_jwt()
+    username = claims.get("username")
+    user = User.query.get(user_id)
 
-
+    if not user:
+        return jsonify({"error":"User not found"}), 404
+    
+    return jsonify({
+        "id": user.id,
+        "username": username,
+        "email": user.email,
+        "created_at": user.created_at.isoformat()
+    })
             
     
 
