@@ -8,6 +8,7 @@ from config import Config
 from app.extensions import db, bcrypt, jwt, migrate
 from app.models.user import User
 from app.routes.auth_routes import auth_bp
+from app.routes.resource_routes import resources_bp
 
 
 def create_app():
@@ -21,5 +22,6 @@ def create_app():
     migrate.init_app(app, db)
 
     app.register_blueprint(auth_bp, url_prefix="/auth")
+    app.register_blueprint(resources_bp, url_prefix="/resources")
     
     return app

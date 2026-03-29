@@ -20,3 +20,9 @@ class User(db.Model):
     
     def __repr__(self):
         return f"<User {self.username}>"    
+    
+    resources = db.relationship(
+        "Resource",
+        backref="user",
+        lazy=True
+    )
