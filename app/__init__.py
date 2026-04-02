@@ -13,7 +13,6 @@ from app.routes.resource_routes import resources_bp
 
 def create_app():
     app = Flask(__name__)
-    CORS(app)
     app.config.from_object(Config)
 
     db.init_app(app)
@@ -23,5 +22,6 @@ def create_app():
 
     app.register_blueprint(auth_bp, url_prefix="/auth")
     app.register_blueprint(resources_bp, url_prefix="/resources")
+    CORS(app)
     
     return app

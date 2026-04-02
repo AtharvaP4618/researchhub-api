@@ -3,6 +3,7 @@ from app.models.user import User
 from app.extensions import db, bcrypt, jwt 
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity, get_jwt
 from sqlalchemy import or_
+from flask_cors import cross_origin
 
 auth_bp = Blueprint("auth", __name__)
 
@@ -40,7 +41,8 @@ def create_user():
         return jsonify({"error": str(e)}), 500
 
 
-@auth_bp.route("/login", methods = ["POST"])
+@auth_bp.route("/login", methods=["POST"])
+@cross_origin()
 def user_login():
     data = request.get_json()
     if not data:
@@ -53,6 +55,7 @@ def user_login():
 
     identifier = data["identifier"]
     password = data["password"]
+
     user = User.query.filter(
         or_(
             User.username == identifier,
@@ -64,7 +67,7 @@ def user_login():
         abort(401, description="Invalid credentials")
     
     access_token = create_access_token(
-        identity= str(user.id),
+        identity=str(user.id),
         additional_claims={
             "username": user.username
         }

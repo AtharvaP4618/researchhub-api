@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ResearchHub</title>
+</head>
+<body>
+
+    <h1>Resources</h1>
+
+    <button onclick="toggleForm()">Add Resource</button>
+
+    <div id="form-container" style="display:none; margin-top:20px;">
+        <form id="resource-form">
+            <input type="text" id="title" placeholder="Title" required />
+            <br/><br/>
+
+            <input type="text" id="url" placeholder="URL" required />
+            <br/><br/>
+
+            <textarea id="description" placeholder="Description"></textarea>
+            <br/><br/>
+
+            <button type="submit">Create</button>
+        </form>
+    </div>
+
+    <hr/>
+    
+    <div id="resource-list"></div>
+
+    <div id="paginationControls">
+        <button id="prevBtn">Previous</button>
+        <span id="pageInfo"></span>
+        <button id="nextBtn">Next</button>
+    </div>
+
+    <script src="../js/dashboard.js"></script>
+
+</body>
+</html>
